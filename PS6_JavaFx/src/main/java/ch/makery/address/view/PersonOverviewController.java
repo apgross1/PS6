@@ -92,7 +92,8 @@ public class PersonOverviewController {
             streetLabel.setText(personDomainModel.getStreet());
             postalCodeLabel.setText(Integer.toString(personDomainModel.getPostalCode()));
             cityLabel.setText(personDomainModel.getCity());
-            birthdayLabel.setText((personDomainModel.getLocalDOB(personDomainModel.getBirthday())).toString());
+           
+            birthdayLabel.setText((personDomainModel.getBirthday()).toString());
         } else {
             // Person is null, remove all the text.
             firstNameLabel.setText("");
@@ -142,9 +143,17 @@ public class PersonOverviewController {
         boolean okClicked = mainApp.showPersonEditDialog(tempPerson.getPersonDomainModel());
         if (okClicked) {
         	//PS6 - Calling the addPerson method
-        	System.out.println("First Name: " + tempPerson.getFirstName());
-            mainApp.getPersonData().add(tempPerson);
-            PersonDAL.addPerson(tempPerson.getPersonDomainModel());
+        	PersonDomainModel per = new PersonDomainModel();
+        	per.setPersonID(tempPerson.getPersonDomainModel().getPersonID());
+        	per.setFirstName(tempPerson.getPersonDomainModel().getFirstName());
+        	per.setLastName(tempPerson.getPersonDomainModel().getLastName());
+        	per.setCity(tempPerson.getPersonDomainModel().getCity());
+        	per.setStreet(tempPerson.getPersonDomainModel().getStreet());
+        	per.setPostalCode(tempPerson.getPersonDomainModel().getPostalCode());
+        	per.setBirthday(tempPerson.getPersonDomainModel().getBirthday());
+        	PersonDAL.addPerson(per);
+        	mainApp.getPersonData().add(tempPerson.getPersonDomainModel());
+            
            
         }
     }
@@ -162,7 +171,8 @@ public class PersonOverviewController {
             	//PS6 - Calling the updatePerson method
             	showPersonDetails(selectedPerson);
             	PersonDAL.updatePerson(selectedPerson);  
-                
+            	mainApp.RefreshPersonTable();
+            	
             }
 
         } else {

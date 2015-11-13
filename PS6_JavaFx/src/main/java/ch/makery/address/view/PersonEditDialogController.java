@@ -74,7 +74,6 @@ public class PersonEditDialogController {
      */
     public void setPerson(PersonDomainModel tempPerson) {
         this.person = tempPerson;
-        System.out.println("First Name: " + tempPerson.getFirstName());
         firstNameField.setText(tempPerson.getFirstName());
         lastNameField.setText(tempPerson.getLastName());
         streetField.setText(tempPerson.getStreet());
@@ -83,9 +82,7 @@ public class PersonEditDialogController {
         birthdayField.setText(DateUtil.format(tempPerson.getBirthday()));
         birthdayField.setPromptText("dd.mm.yyyy");
         person.setPersonID(tempPerson.getPersonID());
-        
-    	//PS6 - Calling the addPerson method
-    	//PersonDAL.addPerson(tempPerson);  
+         
     }
 
     /**
@@ -103,8 +100,6 @@ public class PersonEditDialogController {
     @FXML
     private void handleOk() {
         if (isInputValid()) {
-        	
-        	
             person.setFirstName(firstNameField.getText());
             person.setLastName(lastNameField.getText());
             person.setStreet(streetField.getText());

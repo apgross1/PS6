@@ -49,7 +49,7 @@ public class PersonDAL {
 		try {
 			tx = session.beginTransaction();	
 			
-			List persons = session.createQuery("FROM PersonDomainModel").list();
+			List<PersonDomainModel> persons = session.createQuery("FROM PersonDomainModel").list();
 			for (Iterator iterator = persons.iterator(); iterator.hasNext();) {
 				PersonDomainModel per = (PersonDomainModel) iterator.next();
 				pers.add(per);

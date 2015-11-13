@@ -31,7 +31,7 @@ public class DateUtil  {
      * @param date the date to be returned as a string
      * @return formatted string
      */
-    public static String format(java.util.Date date) {
+    public static String format(Date date) {
         if (date == null) {
             return null;
         }

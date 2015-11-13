@@ -102,12 +102,8 @@ public class PersonDomainModel {
     
     
     public static LocalDate getLocalDOB(Date date) {
-    	Instant instant = Instant.ofEpochMilli(date.getTime());
-    	LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
-    	System.out.println("localDate: " + localDate.toString());
-    	
-    	//LocalDate localDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
-        return localDate;
+    	LocalDate DOB = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+    	return DOB;
     }
     
     public Date getDOBfromLocalDate(LocalDate date) {
@@ -124,10 +120,10 @@ public class PersonDomainModel {
 	}
 	
 	 public StringProperty getLastNameProperty() {
-	        return new SimpleStringProperty(getLastName());
+	        return new SimpleStringProperty(this.getLastName());
 	    }
 	 
 	 public StringProperty getFirstNameProperty() {
-	        return new SimpleStringProperty(getFirstName());
+	        return new SimpleStringProperty(this.getFirstName());
 	    }
 }
