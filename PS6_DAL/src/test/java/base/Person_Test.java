@@ -30,6 +30,7 @@ public class Person_Test {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+		//Delete person record after every test
 		PersonDAL.deletePerson(person.getPersonID());
 		
 	}
@@ -44,17 +45,20 @@ public class Person_Test {
 	
 	@Test
 	public void addPersonTest() {
+		//Try to get the value of person in database but fail because it has not been added yet
 		try {
 		PersonDAL.getPerson(person.getPersonID());
 		}
 		catch (IndexOutOfBoundsException e) {
+			//Should catch the error thrown and output this message
 			System.out.println("No record of person in database.");
 		}
 		
 		
-		
+		//Now attempt to add person to database
 		try {
 			PersonDAL.addPerson(person); 
+			//Test to determine if person was added to database
 			assertTrue(PersonDAL.getPerson(person.getPersonID()).getPersonID().toString().equals(person.getPersonID().toString()));
 			System.out.println("Person added to the database!");
 		}
