@@ -12,15 +12,17 @@ import java.util.UUID;
 import base.PersonDAL;
 import ch.makery.address.MainApp;
 import ch.makery.address.model.Person;
+import ch.qos.logback.core.net.SyslogOutputStream;
+import domain.PersonDomainModel;
 
 
 public class PersonOverviewController {
     @FXML
-    private TableView<Person> personTable;
+    private TableView<PersonDomainModel> personTable;
     @FXML
-    private TableColumn<Person, String> firstNameColumn;
+    private TableColumn<PersonDomainModel, String> firstNameColumn;
     @FXML
-    private TableColumn<Person, String> lastNameColumn;
+    private TableColumn<PersonDomainModel, String> lastNameColumn;
 
     @FXML
     private Label firstNameLabel;
@@ -52,8 +54,8 @@ public class PersonOverviewController {
     @FXML
     private void initialize() {
         // Initialize the person table with the two columns.
-        firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-        lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+        firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().getFirstNameProperty());
+        lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().getLastNameProperty());
         
         // Clear person details.
         showPersonDetails(null);
@@ -79,17 +81,18 @@ public class PersonOverviewController {
      * Fills all text fields to show details about the person.
      * If the specified person is null, all text fields are cleared.
      * 
-     * @param person the person or null
+     * @param personDomainModel the person or null
      */
-    private void showPersonDetails(Person person) {
-        if (person != null) {
+    private void showPersonDetails(PersonDomainModel personDomainModel) {
+        if (personDomainModel != null) {
             // Fill the labels with info from the person object.
-            firstNameLabel.setText(person.getFirstName());
-            lastNameLabel.setText(person.getLastName());
-            streetLabel.setText(person.getStreet());
-            postalCodeLabel.setText(Integer.toString(person.getPostalCode()));
-            cityLabel.setText(person.getCity());
-            birthdayLabel.setText(person.getBirthday().toString());
+        	System.out.println("First name: " + personDomainModel.getFirstName());
+            firstNameLabel.setText(personDomainModel.getFirstName());
+            lastNameLabel.setText(personDomainModel.getLastName());
+            streetLabel.setText(personDomainModel.getStreet());
+            postalCodeLabel.setText(Integer.toString(personDomainModel.getPostalCode()));
+            cityLabel.setText(personDomainModel.getCity());
+            birthdayLabel.setText((personDomainModel.getLocalDOB(personDomainModel.getBirthday())).toString());
         } else {
             // Person is null, remove all the text.
             firstNameLabel.setText("");
@@ -111,7 +114,7 @@ public class PersonOverviewController {
         	
         	//PS6 - Calling the deletePerson method
         	//		Figure out the value of perID
-        	UUID perID = UUID.fromString("1234");
+        	UUID perID = personTable.getItems().get(selectedIndex).getPersonID();
         	
         	PersonDAL.deletePerson(perID); 
             personTable.getItems().remove(selectedIndex);
@@ -136,11 +139,13 @@ public class PersonOverviewController {
     @FXML
     private void handleNewPerson() {
         Person tempPerson = new Person();
-        boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
+        boolean okClicked = mainApp.showPersonEditDialog(tempPerson.getPersonDomainModel());
         if (okClicked) {
         	//PS6 - Calling the addPerson method
-        	PersonDAL.addPerson(tempPerson);        	
+        	System.out.println("First Name: " + tempPerson.getFirstName());
             mainApp.getPersonData().add(tempPerson);
+            PersonDAL.addPerson(tempPerson.getPersonDomainModel());
+           
         }
     }
 
@@ -150,14 +155,14 @@ public class PersonOverviewController {
      */
     @FXML
     private void handleEditPerson() {
-        Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+        PersonDomainModel selectedPerson = personTable.getSelectionModel().getSelectedItem();
         if (selectedPerson != null) {
             boolean okClicked = mainApp.showPersonEditDialog(selectedPerson);
             if (okClicked) {
-            	
             	//PS6 - Calling the updatePerson method
+            	showPersonDetails(selectedPerson);
             	PersonDAL.updatePerson(selectedPerson);  
-                showPersonDetails(selectedPerson);
+                
             }
 
         } else {

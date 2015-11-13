@@ -10,12 +10,15 @@ import javafx.stage.Stage;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
+import java.util.UUID;
 
 import base.PersonDAL;
 import ch.makery.address.model.Person;
 import ch.makery.address.util.DateUtil;
+import domain.PersonDomainModel;
 
 
 /**
@@ -37,10 +40,11 @@ public class PersonEditDialogController {
     private TextField cityField;
     @FXML
     private TextField birthdayField;
-
+    
+    private UUID personID;
 
     private Stage dialogStage;
-    private Person person;
+    private PersonDomainModel person;
     private boolean okClicked = false;
 
     /**
@@ -66,21 +70,22 @@ public class PersonEditDialogController {
     /**
      * Sets the person to be edited in the dialog.
      * 
-     * @param person
+     * @param tempPerson
      */
-    public void setPerson(Person person) {
-        this.person = person;
-
-        firstNameField.setText(person.getFirstName());
-        lastNameField.setText(person.getLastName());
-        streetField.setText(person.getStreet());
-        postalCodeField.setText(Integer.toString(person.getPostalCode()));
-        cityField.setText(person.getCity());
-        birthdayField.setText(DateUtil.format(person.getBirthday()));
+    public void setPerson(PersonDomainModel tempPerson) {
+        this.person = tempPerson;
+        System.out.println("First Name: " + tempPerson.getFirstName());
+        firstNameField.setText(tempPerson.getFirstName());
+        lastNameField.setText(tempPerson.getLastName());
+        streetField.setText(tempPerson.getStreet());
+        postalCodeField.setText(Integer.toString(tempPerson.getPostalCode()));
+        cityField.setText(tempPerson.getCity());
+        birthdayField.setText(DateUtil.format(tempPerson.getBirthday()));
         birthdayField.setPromptText("dd.mm.yyyy");
+        person.setPersonID(tempPerson.getPersonID());
         
     	//PS6 - Calling the addPerson method
-    	PersonDAL.updatePerson(person);  
+    	//PersonDAL.addPerson(tempPerson);  
     }
 
     /**
@@ -105,8 +110,9 @@ public class PersonEditDialogController {
             person.setStreet(streetField.getText());
             person.setPostalCode(Integer.parseInt(postalCodeField.getText()));
             person.setCity(cityField.getText());
-            person.setBirthday(DateUtil.parse(birthdayField.getText()));
+            person.setBirthday(person.getDOBfromLocalDate(DateUtil.parse(birthdayField.getText())));
             okClicked = true;
+            
             dialogStage.close();
         }
     }
@@ -175,4 +181,6 @@ public class PersonEditDialogController {
             return false;
         }
     }
+
+
 }

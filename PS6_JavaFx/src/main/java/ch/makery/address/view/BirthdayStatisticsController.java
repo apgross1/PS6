@@ -12,6 +12,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import ch.makery.address.model.Person;
+import domain.PersonDomainModel;
 
 /**
  * The controller for the birthday statistics view.
@@ -46,13 +47,13 @@ public class BirthdayStatisticsController {
     /**
      * Sets the persons to show the statistics for.
      * 
-     * @param persons
+     * @param personData
      */
-    public void setPersonData(List<Person> persons) {
+    public void setPersonData(ObservableList<PersonDomainModel> personData) {
         // Count the number of people having their birthday in a specific month.
         int[] monthCounter = new int[12];
-        for (Person p : persons) {
-            int month = p.getBirthday().getMonthValue() - 1;
+        for (PersonDomainModel p : personData) {
+            int month = p.getBirthday().getMonth() - 1;
             monthCounter[month]++;
         }
 
@@ -65,4 +66,5 @@ public class BirthdayStatisticsController {
 
         barChart.getData().add(series);
     }
+
 }

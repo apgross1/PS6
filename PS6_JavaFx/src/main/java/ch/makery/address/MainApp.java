@@ -39,7 +39,7 @@ public class MainApp extends Application {
     /**
      * The data as an observable list of Persons.
      */
-    private ObservableList<Person> personData = FXCollections.observableArrayList();
+    private ObservableList<PersonDomainModel> personData = FXCollections.observableArrayList();
 
     /**
      * Constructor
@@ -51,11 +51,11 @@ public class MainApp extends Application {
     	
     	for (PersonDomainModel p: people)
     	{
-    		personData.add(new Person(p.getFirstName(),p.getLastName(), p.getStreet(), p.getPostalCode(),p.getCity(), p.getBirthday()));
+    		personData.add(p);
     	}
     }
 
-    public ObservableList<Person> getPersonData() {
+    public ObservableList<PersonDomainModel> getPersonData() {
         return personData;
     }
 
@@ -131,10 +131,10 @@ public class MainApp extends Application {
      * clicks OK, the changes are saved into the provided person object and true
      * is returned.
      * 
-     * @param person the person object to be edited
+     * @param tempPerson the person object to be edited
      * @return true if the user clicked OK, false otherwise.
      */
-    public boolean showPersonEditDialog(Person person) {
+    public boolean showPersonEditDialog(PersonDomainModel tempPerson) {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -152,7 +152,7 @@ public class MainApp extends Application {
             // Set the person into the controller.
             PersonEditDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setPerson(person);
+            controller.setPerson(tempPerson);
             
             // Set the dialog icon.
             dialogStage.getIcons().add(new Image("file:resources/images/edit.png"));
@@ -193,7 +193,7 @@ public class MainApp extends Application {
             dialogStage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+        	e.printStackTrace();
         }
     }
     
@@ -271,7 +271,7 @@ public class MainApp extends Application {
      * 
      * @param file
      */
-    public void savePersonDataToFile(File file) {
+   /* public void savePersonDataToFile(File file) {
         try {
             JAXBContext context = JAXBContext
                     .newInstance(PersonListWrapper.class);
@@ -295,7 +295,7 @@ public class MainApp extends Application {
         	
         	alert.showAndWait();
         }
-    }
+    }*/
 
     /**
      * Returns the main stage.
@@ -308,4 +308,6 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
 }

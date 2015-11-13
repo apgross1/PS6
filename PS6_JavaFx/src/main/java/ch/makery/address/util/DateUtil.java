@@ -3,13 +3,19 @@ package ch.makery.address.util;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
+import java.util.Date;
+
+import ch.makery.address.model.Person;
+import domain.PersonDomainModel;
+
 
 /**
  * Helper functions for handling dates.
  * 
  * @author Marco Jakob
  */
-public class DateUtil {
+public class DateUtil  { 
 
     /** The date pattern that is used for conversion. Change as you wish. */
     private static final String DATE_PATTERN = "dd.MM.yyyy";
@@ -25,11 +31,11 @@ public class DateUtil {
      * @param date the date to be returned as a string
      * @return formatted string
      */
-    public static String format(LocalDate date) {
+    public static String format(java.util.Date date) {
         if (date == null) {
             return null;
         }
-        return DATE_FORMATTER.format(date);
+        return DATE_FORMATTER.format((TemporalAccessor) PersonDomainModel.getLocalDOB(date));
     }
 
     /**
